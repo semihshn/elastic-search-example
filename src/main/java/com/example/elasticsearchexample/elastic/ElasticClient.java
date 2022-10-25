@@ -1,29 +1,28 @@
 package com.example.elasticsearchexample.elastic;
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-@Data
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class ElasticClient {
 
-    private final RestHighLevelClient elasticSearchClient;
+    private final CustomConfig config;
 
-    public ElasticClient(@Value("${elastic.search.domain}") String elasticSearchDomain) {
+    @Bean
+    public RestHighLevelClient setElasticSearchClient() {
+        log.info(String.format("elastichsearch host: %s", config.getDomain()));
 
-        log.info(String.format("elastichsearch host: %s", elasticSearchDomain));
-
-        this.elasticSearchClient = new RestHighLevelClient(
+        return new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost(elasticSearchDomain, 9200, "http"),
-                        new HttpHost(elasticSearchDomain, 9201, "http")
+                        new HttpHost(config.getDomain(), 9200, "http")
                 ));
-
     }
 }

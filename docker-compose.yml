@@ -2,7 +2,7 @@ version: '3'
 services:
 
   elastic-search-example:
-    image: elastic-search-example-image
+    build: .
     container_name: elastic-search-example-container
     depends_on:
       - elasticsearch
