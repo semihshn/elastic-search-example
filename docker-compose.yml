@@ -1,0 +1,35 @@
+version: '3'
+services:
+
+  elastic-search-example:
+    image: elastic-search-example-image
+    container_name: elastic-search-example-container
+    depends_on:
+      - elasticsearch
+    ports:
+      - '3333:3333'
+    environment:
+      - ELASTIC_SEARCH_DOMAIN=elasticsearch
+    networks:
+      - microservicesNetwork
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0
+    container_name: elastic-search
+    platform: linux/x86_64
+    environment:
+      - discovery.type=single-node
+      - max_open_files=65536
+      - max_content_length_in_bytes=100000000
+      - transport.host= elasticsearch
+    volumes:
+      - $HOME/app:/var/app
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - microservicesNetwork
+
+networks:
+  microservicesNetwork:
+    driver: bridge
